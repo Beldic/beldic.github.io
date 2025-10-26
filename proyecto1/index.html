@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filosofía de la Economía - Portal</title>
+    <link rel="stylesheet" href="portal.css">
+</head>
+<body>
+    <div class="background-logo">
+        <img src="logo.svg" alt="Logo Filosofía de la Economía">
+    </div>
+
+    <div class="container">
+        <header class="portal-header">
+            <div class="header-background">
+                <img src="img/busts-756620_1920.jpg" alt="Filósofos">
+            </div>
+            <div class="header-content">
+                <div class="logo-container">
+                    <img src="logo.svg" alt="Filosofía de la Economía" class="main-logo">
+                </div>
+                <h1 class="portal-title">Experimentos Mentales sobre Economía</h1>
+                <p class="portal-subtitle">Simulaciones interactivas para comprender las dinámicas del crecimiento económico y la distribución de riqueza</p>
+            </div>
+        </header>
+
+        <main class="portal-main">
+            <div class="cards-grid">
+                <!-- Card 1: La Paradoja del Crecimiento -->
+                <a href="crecimiento.html" class="simulation-card" data-simulation="crecimiento">
+                    <div class="card-background">
+                        <img src="img/coins-8450635_1920.jpg" alt="Monedas">
+                    </div>
+                    <div class="card-content">
+                        <h2 class="card-title">La Paradoja del Crecimiento</h2>
+                    <p class="card-description">
+                        Explora cómo un agente acumulador concentra riqueza mientras la economía crece.
+                        Visualiza la distribución porcentual en tiempo real mediante un gráfico de tarta dinámico.
+                    </p>
+                        <ul class="card-features">
+                            <li>📊 Gráfico de tarta interactivo</li>
+                            <li>💰 10 agentes económicos</li>
+                            <li>📈 Redistribución ajustable (0-50%)</li>
+                            <li>🎯 Índice Gini en tiempo real</li>
+                        </ul>
+                        <div class="card-button">
+                            <span>Explorar simulación</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 2: El Precio del Pan -->
+                <a href="pan.html" class="simulation-card" data-simulation="pan">
+                    <div class="card-background">
+                        <img src="img/artisan-bread-9860622_1280.jpg" alt="Pan">
+                    </div>
+                    <div class="card-content">
+                        <h2 class="card-title">El Precio del Pan</h2>
+                    <p class="card-description">
+                        Descubre la inflación real a través del poder adquisitivo. Observa cómo el crecimiento nominal
+                        oculta la pérdida de capacidad de compra medida en bienes tangibles.
+                    </p>
+                        <ul class="card-features">
+                            <li>🍞 Medición en bienes reales</li>
+                            <li>📉 Gráfico de evolución temporal</li>
+                            <li>⚙️ Algoritmo paso a paso</li>
+                            <li>💡 Comparativa base vs actual</li>
+                        </ul>
+                        <div class="card-button">
+                            <span>Explorar simulación</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Sección informativa -->
+            <section class="info-section">
+                <div class="info-card">
+                    <h3>🎓 ¿Qué son estos experimentos?</h3>
+                    <p>
+                        Modelos matemáticos simplificados que revelan dinámicas económicas fundamentales.
+                        A través de simulaciones interactivas, puedes explorar cómo el crecimiento económico
+                        no implica necesariamente una distribución equitativa de la riqueza.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <h3>🔬 Metodología</h3>
+                    <p>
+                        Cada simulación parte de condiciones iniciales iguales (todos los agentes con 10% de la economía)
+                        y permite observar cómo las tasas diferenciales de acumulación generan desigualdad creciente
+                        a lo largo del tiempo, incluso con mecanismos de redistribución activos.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <h3>💭 Objetivo</h3>
+                    <p>
+                        Cuestionar la narrativa convencional del "crecimiento económico" como objetivo universal.
+                        Los números monetarios pueden crecer mientras el poder económico real se evapora para la mayoría.
+                        <em>La pregunta no es si la economía crece, sino ¿para quién crece?</em>
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="portal-footer">
+            <div class="footer-content">
+                <p class="footer-author">Jordi Casado Sobrepere</p>
+                <p class="footer-divider">|</p>
+                <p class="footer-year">2025 · v0.0.1</p>
+                <p class="footer-divider">|</p>
+                <p class="footer-theme">Filosofía de la Economía</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

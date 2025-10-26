@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Precio del Pan - Filosofía de la Economía</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="pan-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-background">
+                <img src="img/artisan-bread-9860622_1280.jpg" alt="Pan artesanal">
+            </div>
+            <div class="header-content">
+                <div class="header-badge">Filosofía de la Economía</div>
+                <h1>El Precio del Pan <span class="emoji">🍞</span></h1>
+                <p class="subtitle">Visualizando la pérdida de poder adquisitivo en la economía del crecimiento</p>
+                <p class="header-description">Cuando tienes más dinero pero puedes comprar menos pan</p>
+            </div>
+        </header>
+
+        <a href="index.html" class="back-to-portal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>Volver al Portal</span>
+        </a>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="bread-metrics">
+                    <div class="metric-card">
+                        <div class="metric-label">Estado</div>
+                        <div class="metric-value" id="currentState">e0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Economía Total</div>
+                        <div class="metric-value" id="totalEconomy">1000</div>
+                    </div>
+                </div>
+
+                <div class="comparison-panel">
+                    <div class="comparison-section">
+                        <h3 class="comparison-title">💰 Precio del Pan</h3>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <div class="comparison-label">Base (e0)</div>
+                                <div class="comparison-value base" id="baseBreadPrice">1,000</div>
+                            </div>
+                            <div class="comparison-arrow">→</div>
+                            <div class="comparison-item">
+                                <div class="comparison-label">Actual</div>
+                                <div class="comparison-value current" id="currentBreadPrice">1,000</div>
+                            </div>
+                            <div class="comparison-item change">
+                                <div class="comparison-label">Cambio</div>
+                                <div class="comparison-value" id="breadPriceChange">0%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="comparison-section">
+                        <h3 class="comparison-title">🍞 Panes Comprables (Promedio No-Acumuladores)</h3>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <div class="comparison-label">Base (e0)</div>
+                                <div class="comparison-value base" id="baseBreadsAffordable">100,0</div>
+                            </div>
+                            <div class="comparison-arrow">→</div>
+                            <div class="comparison-item">
+                                <div class="comparison-label">Actual</div>
+                                <div class="comparison-value current" id="currentBreadsAffordable">100,0</div>
+                            </div>
+                            <div class="comparison-item change">
+                                <div class="comparison-label">Cambio</div>
+                                <div class="comparison-value" id="breadsChange">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="lineChart"></canvas>
+                </div>
+
+                <div class="controls">
+                    <button id="stepBtn" class="btn btn-primary">
+                        <span>▶</span> Siguiente Iteración
+                    </button>
+                    <button id="step10Btn" class="btn btn-secondary">
+                        <span>⏩</span> +10 Iteraciones
+                    </button>
+                    <button id="autoPlayBtn" class="btn btn-success">
+                        <span>⏯</span> Auto-Play
+                    </button>
+                    <button id="resetBtn" class="btn btn-danger">
+                        <span>↺</span> Reiniciar
+                    </button>
+                </div>
+
+                <div class="speed-control">
+                    <label for="speedSlider">Velocidad Auto-Play:</label>
+                    <input type="range" id="speedSlider" min="100" max="2000" value="500" step="100">
+                    <span id="speedValue">500ms</span>
+                </div>
+
+                <div class="speed-control">
+                    <label for="redistributionSlider">Redistribución:</label>
+                    <input type="range" id="redistributionSlider" min="0" max="50" value="15" step="1">
+                    <span id="redistributionValue">15%</span>
+                </div>
+
+                <div class="speed-control">
+                    <label for="breadFractionSlider">Fracción del Pan:</label>
+                    <input type="range" id="breadFractionSlider" min="0.5" max="2" value="1" step="0.1">
+                    <span id="breadFractionValue">0.100%</span>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="table-header">
+                    <h2>Poder Adquisitivo (Panes Comprables)</h2>
+                </div>
+                <div class="table-container">
+                    <table id="agentsTable">
+                        <thead>
+                            <tr>
+                                <th>Agente</th>
+                                <th>Dinero</th>
+                                <th>Panes</th>
+                                <th>Δ Panes</th>
+                                <th>Visual</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="info-box">
+                    <h3>🍞 ¿Cómo funciona?</h3>
+                    <p><strong>Precio del Pan:</strong> Fracción fija de la economía total (<span id="breadFractionInfo">0.100%</span>)</p>
+                    <p><strong>Inflación:</strong> El precio sube cuando la economía crece</p>
+                    <p><strong>Poder Adquisitivo:</strong> Panes = Dinero ÷ Precio del Pan</p>
+                    <p><strong>Redistribución:</strong> <span id="redistributionInfo">15%</span> de lo generado por a1</p>
+                    <p class="insight" id="insightText">
+                        En el estado inicial, todos pueden comprar la misma cantidad de pan.
+                        Observa cómo evoluciona el poder adquisitivo de cada agente.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Contenido Teórico -->
+        <section class="theory-section">
+            <div class="theory-card">
+                <h2 class="section-title">📋 Planteamiento: ¿Qué es la Inflación?</h2>
+
+                <div class="theory-content">
+                    <h3>El Pan como Unidad de Medida</h3>
+                    <p>Para entender verdaderamente la inflación y el poder adquisitivo, necesitamos un <strong>bien real y tangible</strong> como referencia. En esta simulación, usamos la <strong>barra de pan</strong> como esa unidad de medida fundamental.</p>
+
+                    <div class="highlight-box">
+                        <p><strong>Premisa fundamental:</strong></p>
+                        <p>Una barra de pan representa una <strong>fracción fija de la economía total</strong>. Por defecto, usamos <strong>0.1% (0.001)</strong> de la economía.</p>
+                        <ul>
+                            <li>Estado e0: Economía = 1000 → Precio pan = 1000 × 0.001 = <strong>1.00 unidades</strong></li>
+                            <li>Estado e10: Economía = 1245 → Precio pan = 1245 × 0.001 = <strong>1.245 unidades</strong></li>
+                        </ul>
+                    </div>
+
+                    <h3>¿Por qué el Pan Crece con la Economía?</h3>
+                    <p>El pan, como cualquier mercancía, tiene un <strong>valor relativo</strong> dentro de la economía global. Cuando la economía crece (porque a1 genera riqueza), todo lo demás se reajusta proporcionalmente:</p>
+
+                    <ol class="numbered-list">
+                        <li><strong>El dinero es una mercancía más:</strong> Al igual que el pan, el dinero también se revaloriza o devalúa según la economía total.</li>
+                        <li><strong>La inflación es proporción:</strong> No es que el pan "suba arbitrariamente", es que mantiene su proporción del total.</li>
+                        <li><strong>Los salarios no siguen el ritmo:</strong> Los agentes no-acumuladores reciben solo una fracción del crecimiento (15% redistribuido).</li>
+                        <li><strong>El resultado inevitable:</strong> Tienen más dinero nominal, pero ese dinero compra menos pan.</li>
+                    </ol>
+
+                    <h3>La Paradoja Visible</h3>
+                    <div class="example-box">
+                        <p><strong>Ejemplo concreto (Estado e20 con redistribución 15%):</strong></p>
+                        <ul>
+                            <li><strong>Agente a1:</strong></li>
+                            <ul>
+                                <li>Dinero: ~466 unidades (inicial: 100)</li>
+                                <li>Precio pan: ~1.55</li>
+                                <li>Panes comprables: <strong>~300 barras</strong> ✅ (+200%)</li>
+                            </ul>
+                            <li><strong>Agentes no-acumuladores:</strong></li>
+                            <ul>
+                                <li>Dinero: ~120 unidades (inicial: 100)</li>
+                                <li>Precio pan: ~1.55</li>
+                                <li>Panes comprables: <strong>~77 barras</strong> ❌ (-23%)</li>
+                            </ul>
+                        </ul>
+                        <p class="insight-text">Los demás tienen <strong>20% más dinero</strong> pero pueden comprar <strong>23% menos pan</strong>. Esta es la inflación real.</p>
+                    </div>
+
+                    <div class="highlight-box warning">
+                        <p><strong>⚠️ La Ilusión Monetaria:</strong></p>
+                        <p>Decir "gano 120 en vez de 100, he mejorado" es una <strong>ilusión</strong>. Lo que importa no es cuánto dinero tienes, sino <strong>qué puedes comprar con él</strong>. El pan (y todas las mercancías) revelan la verdad: tu poder adquisitivo real ha disminuido.</p>
+                    </div>
+
+                    <h3>Ajusta la Fracción del Pan</h3>
+                    <p>En la simulación puedes ajustar la <strong>fracción del pan</strong> (0.05% - 0.2%). Esto representa diferentes escenarios:</p>
+                    <ul class="bullet-list">
+                        <li><strong>0.05% (fracción baja):</strong> Pan "barato" - tarda más en ser inaccesible</li>
+                        <li><strong>0.1% (por defecto):</strong> Escenario realista</li>
+                        <li><strong>0.2% (fracción alta):</strong> Pan "caro" - la pérdida de poder adquisitivo es más dramática</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="theory-card">
+                <h2 class="section-title">⚙️ El Algoritmo: Paso a Paso</h2>
+
+                <div class="theory-content">
+                    <p>Vamos a desglosar <strong>exactamente</strong> cómo funciona la simulación, paso por paso, con números ultra-sencillos. Sin fórmulas complicadas, solo aritmética básica.</p>
+
+                    <h3>📍 Estado Inicial (e0)</h3>
+                    <div class="algorithm-box">
+                        <p><strong>Configuración inicial:</strong></p>
+                        <ul>
+                            <li>10 agentes económicos</li>
+                            <li>Cada agente tiene <strong>100 unidades de dinero</strong></li>
+                            <li>Economía total = 100 + 100 + 100 + ... (10 veces) = <strong>1000 unidades</strong></li>
+                        </ul>
+
+                        <p><strong>El precio del pan:</strong></p>
+                        <ul>
+                            <li>El pan representa el <strong>0,1%</strong> de la economía (fracción = 0,001)</li>
+                            <li>Precio del pan = 1000 × 0,001 = <strong>1 unidad</strong></li>
+                        </ul>
+
+                        <p><strong>¿Cuántos panes puede comprar cada agente?</strong></p>
+                        <ul>
+                            <li>Panes = Dinero ÷ Precio del pan</li>
+                            <li>Panes = 100 ÷ 1 = <strong>100 barras</strong> (todos por igual)</li>
+                        </ul>
+                    </div>
+
+                    <h3>▶️ Primera Iteración (e0 → e1)</h3>
+                    <p>Ahora viene la magia (o la tragedia). Veamos qué pasa en la primera iteración:</p>
+
+                    <div class="algorithm-box step">
+                        <p><strong>Paso 1: El agente a1 crece un 8%</strong></p>
+                        <ul>
+                            <li>a1 tenía: 100 unidades</li>
+                            <li>a1 crece: 100 × 0,08 = <strong>8 unidades</strong></li>
+                            <li>a1 ahora tiene: 100 + 8 = <strong>108 unidades</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="algorithm-box step">
+                        <p><strong>Paso 2: Redistribución (15% de lo generado)</strong></p>
+                        <ul>
+                            <li>a1 generó: 8 unidades</li>
+                            <li>Se redistribuye: 8 × 0,15 = <strong>1,2 unidades</strong></li>
+                            <li>Para repartir entre 9 agentes: 1,2 ÷ 9 = <strong>0,133 unidades cada uno</strong></li>
+                        </ul>
+
+                        <p><strong>Los demás agentes reciben:</strong></p>
+                        <ul>
+                            <li>a2 tenía: 100 → ahora tiene: 100 + 0,133 = <strong>100,133</strong></li>
+                            <li>a3, a4... a10: lo mismo → <strong>100,133 cada uno</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="algorithm-box step">
+                        <p><strong>Paso 3: Recalcular la economía total</strong></p>
+                        <ul>
+                            <li>a1: 108</li>
+                            <li>Los demás (9 agentes): 100,133 × 9 = 901,2</li>
+                            <li>Economía total: 108 + 901,2 = <strong>1009,2 unidades</strong></li>
+                        </ul>
+                        <p class="insight-text">¡La economía creció! De 1000 a 1009,2 (+0,92%)</p>
+                    </div>
+
+                    <div class="algorithm-box step">
+                        <p><strong>Paso 4: Recalcular el precio del pan</strong></p>
+                        <ul>
+                            <li>El pan sigue siendo 0,1% de la economía</li>
+                            <li>Nuevo precio = 1009,2 × 0,001 = <strong>1,0092 unidades</strong></li>
+                        </ul>
+                        <p class="insight-text">El pan subió de 1,000 a 1,0092 (¡inflación del 0,92%!)</p>
+                    </div>
+
+                    <div class="algorithm-box result">
+                        <p><strong>Paso 5: ¿Cuántos panes puede comprar ahora cada agente?</strong></p>
+
+                        <p><strong>Agente a1:</strong></p>
+                        <ul>
+                            <li>Panes = 108 ÷ 1,0092 = <strong>107 barras</strong></li>
+                            <li>Cambio: 107 - 100 = <strong>+7 panes</strong> ✅</li>
+                        </ul>
+
+                        <p><strong>Agentes a2 a a10:</strong></p>
+                        <ul>
+                            <li>Panes = 100,133 ÷ 1,0092 = <strong>99,2 barras</strong></li>
+                            <li>Cambio: 99,2 - 100 = <strong>-0,8 panes</strong> ❌</li>
+                        </ul>
+                    </div>
+
+                    <h3>🔁 Segunda Iteración (e1 → e2)</h3>
+                    <p>El proceso se repite, pero ahora con los nuevos valores:</p>
+
+                    <div class="algorithm-box">
+                        <p><strong>Paso 1: a1 crece otro 8%</strong></p>
+                        <ul>
+                            <li>a1 tenía: 108</li>
+                            <li>a1 crece: 108 × 0,08 = <strong>8,64 unidades</strong></li>
+                            <li>a1 ahora tiene: 108 + 8,64 = <strong>116,64 unidades</strong></li>
+                        </ul>
+
+                        <p><strong>Paso 2: Redistribución</strong></p>
+                        <ul>
+                            <li>Se redistribuye: 8,64 × 0,15 = 1,296 unidades</li>
+                            <li>Cada agente recibe: 1,296 ÷ 9 = <strong>0,144 unidades</strong></li>
+                            <li>Los demás pasan de 100,133 a <strong>100,277</strong></li>
+                        </ul>
+
+                        <p><strong>Paso 3: Nueva economía total</strong></p>
+                        <ul>
+                            <li>Total: 116,64 + (100,277 × 9) = <strong>1018,9 unidades</strong></li>
+                        </ul>
+
+                        <p><strong>Paso 4: Nuevo precio del pan</strong></p>
+                        <ul>
+                            <li>Precio: 1018,9 × 0,001 = <strong>1,0189 unidades</strong></li>
+                        </ul>
+
+                        <p><strong>Paso 5: Panes comprables</strong></p>
+                        <ul>
+                            <li>a1: 116,64 ÷ 1,0189 = <strong>114,5 barras</strong> (+14,5 desde e0)</li>
+                            <li>Otros: 100,277 ÷ 1,0189 = <strong>98,4 barras</strong> (-1,6 desde e0)</li>
+                        </ul>
+                    </div>
+
+                    <h3>📈 Iteración 20 (e20)</h3>
+                    <p>Después de 20 iteraciones (el algoritmo se ejecuta 20 veces):</p>
+
+                    <div class="algorithm-box result-final">
+                        <ul>
+                            <li>Economía total: ~<strong>1550 unidades</strong> (+55% desde e0)</li>
+                            <li>Precio del pan: ~<strong>1,55 unidades</strong> (+55%)</li>
+                            <li><strong>Agente a1:</strong></li>
+                            <ul>
+                                <li>Dinero: ~466 unidades (+366%)</li>
+                                <li>Panes: ~<strong>300 barras</strong> (+200%) ✅✅✅</li>
+                            </ul>
+                            <li><strong>Agentes no-acumuladores:</strong></li>
+                            <ul>
+                                <li>Dinero: ~120 unidades (+20%)</li>
+                                <li>Panes: ~<strong>77 barras</strong> (-23%) ❌❌❌</li>
+                            </ul>
+                        </ul>
+                        <p class="insight-text-large">¡a1 puede comprar casi 4 veces más pan, mientras los demás perdieron casi una cuarta parte de su capacidad de compra!</p>
+                    </div>
+
+                    <h3>🔑 Las Claves del Algoritmo</h3>
+                    <div class="key-points">
+                        <div class="key-point">
+                            <div class="key-number">1</div>
+                            <div class="key-text">
+                                <strong>Crecimiento desigual:</strong> a1 crece 8%, los demás reciben solo una fracción (15% de ese 8% = 1,2% distribuido entre 9)
+                            </div>
+                        </div>
+
+                        <div class="key-point">
+                            <div class="key-number">2</div>
+                            <div class="key-text">
+                                <strong>Inflación proporcional:</strong> El precio del pan sigue siendo 0,1% de la economía total, por eso sube cuando la economía crece
+                            </div>
+                        </div>
+
+                        <div class="key-point">
+                            <div class="key-number">3</div>
+                            <div class="key-text">
+                                <strong>Efecto compuesto:</strong> a1 crece sobre lo ya crecido (8% de 108 > 8% de 100), los demás reciben migajas sobre migajas
+                            </div>
+                        </div>
+
+                        <div class="key-point">
+                            <div class="key-number">4</div>
+                            <div class="key-text">
+                                <strong>El pan revela la verdad:</strong> Los números monetarios (+20%) ocultan la pérdida real de poder adquisitivo (-23%)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box conclusion">
+                        <p><strong>🎯 En resumen:</strong></p>
+                        <p>El algoritmo es brutalmente simple: a1 acumula exponencialmente, genera crecimiento económico, redistribuye una porción minúscula, el pan sube de precio porque es una fracción fija de la economía creciente, y los demás tienen más dinero pero compran menos pan.</p>
+                        <p class="final-thought">No es un bug. <em>Es el sistema funcionando exactamente como está diseñado.</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theory-card">
+                <h2 class="section-title">💡 Conclusiones: El Pan No Miente</h2>
+
+                <div class="theory-content">
+                    <h3>1. La Inflación es Redistribución Silenciosa</h3>
+                    <p>La inflación no es un fenómeno neutral o técnico. Es un <strong>mecanismo de redistribución</strong> que favorece a quienes controlan activos que crecen más rápido que la economía (a1), y perjudica a quienes dependen de ingresos que crecen más lento (los demás).</p>
+
+                    <h3>2. El Dinero es Relativo, el Pan es Absoluto</h3>
+                    <p>El <strong>dinero</strong> es una abstracción, un número en una cuenta. El <strong>pan</strong> es real, tangible, necesario. Medir la economía en panes (o cualquier bien básico) revela la verdad que los números monetarios ocultan.</p>
+
+                    <div class="philosophy-box">
+                        <p><strong>Pregunta filosófica:</strong></p>
+                        <p>¿Eres más rico si tienes 120 unidades pero puedes comprar 77 panes, en vez de 100 unidades que compraban 100 panes?</p>
+                        <p class="insight-text">Los números dicen que sí (+20%). La realidad dice que no (-23%).</p>
+                    </div>
+
+                    <h3>3. El Crecimiento Económico Beneficia Desigualmente</h3>
+                    <p>Este modelo demuestra que <strong>el crecimiento económico no beneficia a todos por igual</strong>, incluso cuando hay redistribución:</p>
+                    <ul class="bullet-list">
+                        <li><strong>Con 0% redistribución:</strong> Los no-acumuladores colapsan rápidamente</li>
+                        <li><strong>Con 15% redistribución:</strong> Pueden sobrevivir pero empobrecen relativamente</li>
+                        <li><strong>Con 50% redistribución:</strong> Mejoran, pero a1 sigue ganando más</li>
+                    </ul>
+
+                    <h3>4. La Trampa del Salario Nominal</h3>
+                    <p>Los trabajadores negocian <strong>salarios nominales</strong> ("quiero ganar 120 en vez de 100"), pero viven con <strong>salarios reales</strong> (cuánto pan pueden comprar). Esta desconexión es explotada sistemáticamente.</p>
+
+                    <div class="example-box">
+                        <p><strong>Escenario real:</strong></p>
+                        <p>Un trabajador negocia un aumento del 20% y siente que ha ganado. Pero si la inflación real (medida en panes) es del 30%, en realidad ha <strong>perdido</strong> un 10% de poder adquisitivo.</p>
+                        <p class="insight-text">Se siente victorioso mientras empobrece. Esta es la ilusión monetaria en acción.</p>
+                    </div>
+
+                    <h3>5. ¿Quién Controla el Precio del Pan?</h3>
+                    <p>En nuestro modelo, el precio del pan es una <strong>consecuencia matemática</strong> del crecimiento económico. Pero en la realidad, surgen preguntas más complejas:</p>
+                    <ul class="bullet-list">
+                        <li>¿Quién decide qué fracción de la economía representa el pan?</li>
+                        <li>¿Los productores de pan son a1 o son otros agentes?</li>
+                        <li>¿Puede el pan volverse inaccesible para la mayoría?</li>
+                        <li>¿Qué pasa cuando el pan (lo básico) consume el 50%, 70%, 90% del ingreso?</li>
+                    </ul>
+
+                    <h3>6. La Solución No Es Trivial</h3>
+                    <p>Este modelo muestra que <strong>ajustar solo la redistribución no resuelve el problema fundamental</strong>:</p>
+
+                    <div class="highlight-box conclusion">
+                        <p><strong>🎯 El Dilema:</strong></p>
+                        <ul class="bullet-list">
+                            <li><strong>Más redistribución:</strong> Ayuda, pero a1 sigue acumulando más rápido</li>
+                            <li><strong>Menos redistribución:</strong> Acelera el colapso de los demás</li>
+                            <li><strong>Solución estructural:</strong> Requiere cuestionar el modelo de acumulación en sí</li>
+                        </ul>
+                    </div>
+
+                    <h3>7. El Pan como Conciencia de Clase</h3>
+                    <p>Cuando medimos la economía en <strong>bienes reales</strong> en vez de dinero abstracto, se vuelve imposible ignorar la desigualdad:</p>
+
+                    <div class="philosophy-box">
+                        <ul class="bullet-list">
+                            <li><strong>En dinero:</strong> "Todos crecen" (ilusión)</li>
+                            <li><strong>En pan:</strong> "Unos comen más, otros menos" (realidad)</li>
+                        </ul>
+                        <p class="insight-text">El pan no miente. Es imposible racionalizar que alguien pueda comprar 300 barras mientras otro solo puede comprar 77.</p>
+                    </div>
+
+                    <div class="highlight-box conclusion">
+                        <p><strong>🍞 Reflexión Final:</strong></p>
+                        <p>La próxima vez que veas estadísticas sobre "crecimiento económico", "aumento salarial" o "inflación moderada", pregúntate: <strong>¿Cuántas barras de pan podía comprar antes y cuántas puedo comprar ahora?</strong></p>
+                        <p>Esa es la única pregunta que importa.</p>
+                        <p class="final-thought">El dinero miente. <em>El pan dice la verdad.</em></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-content">
+                <p class="footer-author">Jordi Casado Sobrepere</p>
+                <p class="footer-divider">|</p>
+                <p class="footer-year">2025 · v0.0.1</p>
+                <p class="footer-divider">|</p>
+                <p class="footer-theme">Filosofía de la Economía</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="pan.js"></script>
+</body>
+</html>

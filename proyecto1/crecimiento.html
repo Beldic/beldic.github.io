@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimento Mental: Crecimiento Económico</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-background">
+                <img src="img/coins-8450635_1920.jpg" alt="Monedas">
+            </div>
+            <div class="header-content">
+                <div class="header-badge">Filosofía de la Economía</div>
+                <h1>La Paradoja del Crecimiento</h1>
+                <p class="subtitle">Un experimento mental sobre concentración de riqueza y redistribución económica</p>
+                <p class="header-description">Cuando todos ganan nominalmente pero pierden porcentualmente</p>
+            </div>
+        </header>
+
+        <a href="index.html" class="back-to-portal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>Volver al Portal</span>
+        </a>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Estado</div>
+                        <div class="metric-value" id="currentState">e0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Economía Total</div>
+                        <div class="metric-value" id="totalEconomy">1000</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">% Concentrado en a1</div>
+                        <div class="metric-value highlight" id="a1Concentration">10.0%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Índice Gini</div>
+                        <div class="metric-value" id="giniIndex">0.000</div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button id="stepBtn" class="btn btn-primary">
+                        <span>▶</span> Siguiente Iteración
+                    </button>
+                    <button id="step10Btn" class="btn btn-secondary">
+                        <span>⏩</span> +10 Iteraciones
+                    </button>
+                    <button id="autoPlayBtn" class="btn btn-success">
+                        <span>⏯</span> Auto-Play
+                    </button>
+                    <button id="resetBtn" class="btn btn-danger">
+                        <span>↺</span> Reiniciar
+                    </button>
+                </div>
+
+                <div class="speed-control">
+                    <label for="speedSlider">Velocidad Auto-Play:</label>
+                    <input type="range" id="speedSlider" min="100" max="2000" value="500" step="100">
+                    <span id="speedValue">500ms</span>
+                </div>
+
+                <div class="speed-control">
+                    <label for="redistributionSlider">Redistribución:</label>
+                    <input type="range" id="redistributionSlider" min="0" max="50" value="15" step="1">
+                    <span id="redistributionValue">15%</span>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="table-header">
+                    <h2>Distribución de Riqueza</h2>
+                </div>
+                <div class="table-container">
+                    <table id="agentsTable">
+                        <thead>
+                            <tr>
+                                <th>Agente</th>
+                                <th>Valor Nominal</th>
+                                <th>% Real</th>
+                                <th>Δ Nominal</th>
+                                <th>Δ % Real</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="info-box">
+                    <h3>📊 Interpretación</h3>
+                    <p><strong>Valor Nominal:</strong> Cantidad absoluta de riqueza</p>
+                    <p><strong>% Real:</strong> Proporción de la economía total (poder adquisitivo)</p>
+                    <p><strong>Agente a1:</strong> Crece 8% por iteración (capitalista acumulador)</p>
+                    <p><strong>Otros agentes:</strong> Reciben <span id="redistributionInfo">15%</span> de lo generado por a1 (redistribución vía salarios, impuestos, subvenciones)</p>
+                    <p class="insight" id="insightText">
+                        Los demás agentes crecen nominalmente gracias a la redistribución de lo que genera a1,
+                        pero su porcentaje real disminuye porque a1 retiene la mayor parte de su crecimiento.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Contenido Teórico -->
+        <section class="theory-section">
+            <div class="theory-card">
+                <h2 class="section-title">📋 Planteamiento del Experimento</h2>
+
+                <div class="theory-content">
+                    <h3>Estado Inicial (e0)</h3>
+                    <p>Supongamos un gráfico de tarta que representa el <strong>100% de la economía</strong>, compuesta por <strong>diez agentes económicos</strong>, cada uno con un <strong>10% del total</strong>.</p>
+
+                    <div class="highlight-box">
+                        <p><strong>Condiciones iniciales:</strong></p>
+                        <ul>
+                            <li>Economía total (E) = 100%</li>
+                            <li>10 agentes: a1, a2, a3... a10</li>
+                            <li>Cada agente = 10% de la economía</li>
+                            <li>∑ (a1 + a2 + ... + a10) = 100%</li>
+                        </ul>
+                    </div>
+
+                    <h3>El Agente Acumulador</h3>
+                    <p>El agente <strong>a1</strong> tiene una propiedad intrínseca diferente: por el <strong>principio de maximización</strong>, tiende a <strong>acumular y reproducir capital</strong> en cada iteración (ciclo económico o estado), incrementando su patrimonio en vez de mantener el mismo estatus económico que el resto de los actores.</p>
+
+                    <div class="highlight-box">
+                        <p><strong>Dinámica de crecimiento:</strong></p>
+                        <ul>
+                            <li><strong>Agente a1:</strong> Crece un 8% en cada iteración (tasa de acumulación capitalista)</li>
+                            <li><strong>Otros agentes:</strong> Reciben una fracción (15% por defecto) de lo que genera a1</li>
+                            <li><strong>Redistribución:</strong> Vía salarios, impuestos, subvenciones, consumo</li>
+                            <li><strong>Retención de a1:</strong> 85% de su crecimiento queda en su patrimonio</li>
+                        </ul>
+                    </div>
+
+                    <h3>Evolución del Sistema</h3>
+                    <p>Al pasar del estado cero (e0) al estado (e1), el agente a1 aumenta su capital al 18% aproximadamente. Este hecho provoca dos efectos simultáneos:</p>
+
+                    <ol class="numbered-list">
+                        <li><strong>El pastel se hace más grande:</strong> La economía total crece porque a1 genera nueva riqueza (inversión, producción, innovación).</li>
+                        <li><strong>Redistribución desigual:</strong> Una pequeña porción del crecimiento se redistribuye entre los demás agentes, permitiéndoles crecer nominalmente.</li>
+                        <li><strong>Concentración porcentual:</strong> A pesar del crecimiento nominal de todos, el porcentaje que controla cada agente no-acumulador disminuye constantemente.</li>
+                        <li><strong>Dependencia estructural:</strong> Los demás agentes dependen completamente de la redistribución que hace a1 para crecer.</li>
+                    </ol>
+
+                    <div class="highlight-box warning">
+                        <p><strong>⚠️ La Paradoja:</strong></p>
+                        <p>Tras múltiples iteraciones, todos los agentes tienen <strong>valores nominales más elevados</strong>, pero los agentes no-acumuladores poseen un <strong>valor real (porcentaje de la economía) mucho más reducido</strong>, con la consiguiente pérdida de estatus y poder adquisitivo relativo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theory-card">
+                <h2 class="section-title">💡 Conclusiones e Implicaciones</h2>
+
+                <div class="theory-content">
+                    <h3>1. Crecimiento ≠ Equidad</h3>
+                    <p>El experimento demuestra que <strong>el crecimiento económico y la distribución equitativa son fenómenos independientes</strong>. Una economía puede crecer exponencialmente mientras la desigualdad aumenta simultáneamente.</p>
+
+                    <h3>2. La Ilusión Nominal</h3>
+                    <p>Los agentes no-acumuladores experimentan lo que podríamos llamar <strong>"ilusión de prosperidad"</strong>: sus valores nominales crecen (tienen "más dinero"), pero su poder adquisitivo real disminuye porque la economía crece más rápido que sus ingresos.</p>
+
+                    <div class="example-box">
+                        <p><strong>Ejemplo numérico (iteración 20):</strong></p>
+                        <ul>
+                            <li><strong>a1:</strong> ~466 unidades (≈30% de la economía)</li>
+                            <li><strong>Otros:</strong> ~120 unidades cada uno (≈7.7% cada uno)</li>
+                        </ul>
+                        <p class="insight-text">Cada agente no-acumulador tiene más dinero (120 vs 100 inicial), pero controla menos economía (7.7% vs 10% inicial).</p>
+                    </div>
+
+                    <h3>3. La Dependencia Estructural</h3>
+                    <p>El modelo revela una <strong>dependencia asimétrica</strong>: los agentes no-acumuladores necesitan que a1 genere riqueza para poder crecer ellos mismos, pero a1 no necesita que los demás crezcan para seguir acumulando.</p>
+
+                    <h3>4. El Papel de la Redistribución</h3>
+                    <p>La tasa de redistribución (ajustable en la simulación del 0% al 50%) determina:</p>
+                    <ul class="bullet-list">
+                        <li><strong>0% redistribución:</strong> Los demás agentes no crecen en absoluto, su porcentaje colapsa rápidamente</li>
+                        <li><strong>15% redistribución:</strong> Los demás crecen moderadamente pero pierden porcentaje constantemente</li>
+                        <li><strong>50% redistribución:</strong> Los demás crecen significativamente, pero a1 sigue concentrando más riqueza</li>
+                    </ul>
+
+                    <h3>5. Implicaciones Filosóficas</h3>
+                    <p>Este experimento mental plantea preguntas fundamentales sobre la naturaleza del valor económico:</p>
+
+                    <div class="philosophy-box">
+                        <ul class="bullet-list">
+                            <li><strong>¿Qué es la riqueza?</strong> ¿Valor nominal absoluto o proporción del total?</li>
+                            <li><strong>¿Qué es el progreso?</strong> ¿Tener más dinero o tener más poder adquisitivo?</li>
+                            <li><strong>¿Qué es la justicia económica?</strong> ¿Crecimiento para todos o distribución equitativa?</li>
+                            <li><strong>¿Es sostenible?</strong> ¿Puede una economía funcionar cuando un agente controla +50%, +70%, +90%?</li>
+                        </ul>
+                    </div>
+
+                    <h3>6. Limitaciones del Modelo</h3>
+                    <p>Este es un modelo simplificado que no considera:</p>
+                    <ul class="bullet-list">
+                        <li>Movilidad entre agentes (otros agentes que se convierten en acumuladores)</li>
+                        <li>Destrucción de capital (crisis, guerras, catástrofes)</li>
+                        <li>Innovación disruptiva que redistribuye el poder</li>
+                        <li>Políticas redistributivas progresivas</li>
+                        <li>Límites naturales al crecimiento</li>
+                    </ul>
+
+                    <div class="highlight-box conclusion">
+                        <p><strong>🎯 Reflexión Final:</strong></p>
+                        <p>Este experimento mental nos invita a cuestionar la narrativa convencional del "crecimiento económico" como objetivo universal. Muestra que <strong>el crecimiento sin mecanismos de redistribución efectivos conduce inexorablemente a la concentración</strong>, y que los valores nominales pueden crecer mientras el poder económico real se evapora para la mayoría.</p>
+                        <p class="final-thought">La pregunta no es si la economía crece, sino <em>¿para quién crece?</em></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-content">
+                <p class="footer-author">Jordi Casado Sobrepere</p>
+                <p class="footer-divider">|</p>
+                <p class="footer-year">2025 · v0.0.1</p>
+                <p class="footer-divider">|</p>
+                <p class="footer-theme">Filosofía de la Economía</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+</html>
